@@ -1,0 +1,621 @@
+//Mekhribon.Yusufbekova
+//Prof. Hao Tang
+//350H
+//Feb 12, 2025
+using System;
+
+
+// the ourAnimals array will store the following: 
+string animalSpecies = "";
+string animalID = "";
+string animalAge = "";
+string animalPhysicalDescription = "";
+string animalPersonalityDescription = "";
+string animalNickname = "";
+
+// variables that support data entry
+int maxPets = 8;
+string? readResult;
+string menuSelection = "";
+
+// array used to store runtime data, there is no persisted data
+string[,] ourAnimals = new string[maxPets, 6];
+
+// TODO: Convert the if-elseif-else construct to a switch statement
+
+// create some initial ourAnimals array entries
+for (int i = 0; i < maxPets; i++)
+{
+    switch (i)
+    {
+        case 0:
+            animalSpecies = "dog";
+            animalID = "d1";
+            animalAge = "2";
+            animalPhysicalDescription = "medium sized cream colored female golden retriever weighing about 65 pounds. housebroken.";
+            animalPersonalityDescription = "loves to have her belly rubbed and likes to chase her tail. gives lots of kisses.";
+            animalNickname = "lola";
+            break;
+
+        case 1:
+
+            animalSpecies = "dog";
+            animalID = "d2";
+            animalAge = "9";
+            animalPhysicalDescription = "large reddish-brown male golden retriever weighing about 85 pounds. housebroken.";
+            animalPersonalityDescription = "loves to have his ears rubbed when he greets you at the door, or at any time! loves to lean-in and give doggy hugs.";
+            animalNickname = "loki";
+            break;
+
+        case 2:
+
+            animalSpecies = "cat";
+            animalID = "c3";
+            animalAge = "1";
+            animalPhysicalDescription = "small white female weighing about 8 pounds. litter box trained.";
+            animalPersonalityDescription = "friendly";
+            animalNickname = "Puss";
+            break;
+
+        case 3:
+            animalSpecies = "cat";
+            animalID = "c4";
+            animalAge = "?";
+            animalPhysicalDescription = "";
+            animalPersonalityDescription = "";
+            animalNickname = "";
+            break;
+
+        default:
+            animalSpecies = "";
+            animalID = "";
+            animalAge = "";
+            animalPhysicalDescription = "";
+            animalPersonalityDescription = "";
+            animalNickname = "";
+            break;
+
+
+    }
+
+    if (i < 4)
+
+    {
+        ourAnimals[i, 0] = "ID #: " + animalID;
+        ourAnimals[i, 1] = "Species: " + animalSpecies;
+        ourAnimals[i, 2] = "Age: " + animalAge;
+        ourAnimals[i, 3] = "Nickname: " + animalNickname;
+        ourAnimals[i, 4] = "Physical description: " + animalPhysicalDescription;
+        ourAnimals[i, 5] = "Personality: " + animalPersonalityDescription;
+    }
+}
+
+// display the top-level menu options
+do
+{
+
+    Console.Clear();
+    Console.WriteLine("Welcome to the Contoso PetFriends app. Your main menu options are:");
+    Console.WriteLine(" 1. List all of our current pet information");
+    Console.WriteLine(" 2. Add a new animal friend to the ourAnimals array");
+    Console.WriteLine(" 3. Ensure animal ages and physical descriptions are complete");
+    Console.WriteLine(" 4. Ensure animal nicknames and personality descriptions are complete");
+    Console.WriteLine(" 5. Edit an animal’s age");
+    Console.WriteLine(" 6. Edit an animal’s personality description");
+    Console.WriteLine(" 7. Display all cats with a specified characteristic");
+    Console.WriteLine(" 8. Display all dogs with a specified characteristic");
+    Console.WriteLine("Enter your selection number (or type Exit to exit the program)");
+    Console.WriteLine();
+
+    Console.Write("Enter your selection: ");
+    readResult = Console.ReadLine();
+    if (readResult != null)
+    {
+        menuSelection = readResult.ToLower();
+    }
+
+    switch (menuSelection)
+    {
+        case "1":
+            // List all of our current pet information
+            for (int i = 0; i < maxPets; i++)
+            {
+                if (ourAnimals[i, 0] != "ID #: ")
+                {
+                    Console.WriteLine();
+                    for (int j = 0; j < 6; j++)
+                    {
+                        Console.WriteLine(ourAnimals[i, j]);
+                    }
+                }
+            }
+
+
+            Console.WriteLine("Press the Enter key to continue.");
+            readResult = Console.ReadLine();
+            break;
+
+        case "2":
+            // Add a new animal friend to the ourAnimals array
+            string anotherPet = "y";
+            int petCount = 0;
+
+            for (int i = 0; i < maxPets; i++)
+            {
+
+                if (ourAnimals[i, 0] != null && ourAnimals[i, 0] != "")
+                {
+                    petCount += 1;
+                }
+            }
+
+            Console.WriteLine($"Debug: petCount = {petCount}, maxPets = {maxPets}");
+
+            if (petCount < maxPets)
+            {
+                Console.WriteLine($"We currently have {petCount} pets that need homes. We can manage {(maxPets - petCount)} more.");
+            }
+            while (anotherPet == "y" && petCount < maxPets)
+            {
+                bool validEntry = false;
+
+                // get species (cat or dog) - string animalSpecies is a required field 
+                do
+                {
+                    Console.WriteLine("\n\rEnter 'dog' or 'cat' to begin a new entry");
+                    readResult = Console.ReadLine();
+                    if (readResult != null)
+                    {
+                        animalSpecies = readResult.ToLower();
+                        if (animalSpecies != "dog" && animalSpecies != "cat")
+                        {
+                            //Console.WriteLine($"You entered {animalSpecies}.");
+                            validEntry = false;
+                        }
+                        else
+                        {
+                            validEntry = true;
+                        }
+                    }
+                } while (validEntry == false);
+
+                do
+                {
+                    Console.WriteLine("Enter the pet's age or enter ? if unknown:");
+                    readResult = Console.ReadLine();
+                    if (readResult != null)
+                    {
+                        animalAge = readResult;
+                        if (animalAge == "")
+                        {
+                            validEntry = false;
+                        }
+                        else
+                        {
+                            validEntry = true;
+                        }
+                    }
+                } while (validEntry == false);
+                do
+                {
+                    Console.WriteLine("Enter a physical description of the pet (size, color, gender, weight, housebroken)");
+                    readResult = Console.ReadLine();
+                    if (readResult != null)
+                    {
+                        animalPhysicalDescription = readResult.ToLower();
+                        if (animalPhysicalDescription == "")
+                        {
+                            animalPhysicalDescription = "tbd";
+                        }
+                    }
+                } while (animalPhysicalDescription == "");
+
+                // get a description of the pet's personality - animalPersonalityDescription can be blank.
+                do
+                {
+                    Console.WriteLine("Enter a description of the pet's personality (likes or dislikes, tricks, energy level)");
+                    readResult = Console.ReadLine();
+                    if (readResult != null)
+                    {
+                        animalPersonalityDescription = readResult.ToLower();
+                        if (animalPersonalityDescription == "")
+                        {
+                            animalPersonalityDescription = "tbd";
+                        }
+                    }
+                } while (animalPersonalityDescription == "");
+
+
+                // get the pet's nickname. animalNickname can be blank.
+                do
+                {
+                    Console.WriteLine("Enter a nickname for the pet");
+                    readResult = Console.ReadLine();
+                    if (readResult != null)
+                    {
+                        animalNickname = readResult.ToLower();
+                        if (animalNickname == "")
+                        {
+                            animalNickname = "tbd";
+                        }
+                    }
+                } while (animalNickname == "");
+
+                if (animalSpecies == "dog")
+                {
+                    animalID = "d" + (petCount + 1).ToString();
+                }
+                else if (animalSpecies == "cat")
+                {
+                    animalID = "c" + (petCount + 1).ToString();
+                }
+
+                ourAnimals[petCount, 0] = "ID #: " + animalID;
+                ourAnimals[petCount, 1] = "Species: " + animalSpecies;
+                ourAnimals[petCount, 2] = "Age: " + animalAge;
+                ourAnimals[petCount, 3] = "Nickname: " + animalNickname;
+                ourAnimals[petCount, 4] = "Physical description: " + animalPhysicalDescription;
+                ourAnimals[petCount, 5] = "Personality: " + animalPersonalityDescription;
+
+
+                // increment petCount (the array is zero-based, so we increment the counter after adding to the array)
+                petCount = petCount + 1;
+
+                // check maxPet limit
+                if (petCount < maxPets)
+                {
+                    // another pet?
+                    Console.WriteLine("Do you want to enter info for another pet (y/n)");
+                    do
+                    {
+                        readResult = Console.ReadLine();
+                        if (readResult != null)
+                        {
+                            anotherPet = readResult.ToLower();
+                        }
+                    } while (anotherPet != "y" && anotherPet != "n");
+
+                }
+            }
+
+
+            if (petCount >= maxPets)
+            {
+                Console.WriteLine("We have reached our limit on the number of pets that we can manage.");
+                Console.WriteLine("Press the Enter key to continue.");
+                readResult = Console.ReadLine();
+            }
+
+            break;
+
+
+        case "3":
+             for (int i = 0; i < maxPets; i++)
+    {
+        if (ourAnimals[i, 0] != null && ourAnimals[i, 0] != "")
+        {
+            // Check if age data is incomplete
+            if (ourAnimals[i, 2] == "Age: ?" || ourAnimals[i, 2] == "Age: ")
+            {
+                // Extract the ID for the message
+                string petID = ourAnimals[i, 0].Substring(5, 2);
+                
+                do
+                {
+                    Console.WriteLine($"\nEnter an age for {petID}");
+                    readResult = Console.ReadLine();
+                    
+                    if (readResult != null && readResult != "")
+                    {
+                        ourAnimals[i, 2] = "Age: " + readResult;
+                    }
+                } while (ourAnimals[i, 2] == "Age: ?" || ourAnimals[i, 2] == "Age: ");
+            }
+            
+            // Check if physical description data is incomplete
+            if (ourAnimals[i, 4] == "Physical description: " || ourAnimals[i, 4] == "Physical description: tbd" || string.IsNullOrWhiteSpace(ourAnimals[i, 4]))
+            {
+                // Extract the ID for the message
+                string petID = ourAnimals[i, 0].Substring(5, 2);
+                
+                do
+                {
+                    Console.WriteLine($"\nEnter a physical description for {petID} (size, color, gender, weight, etc.)");
+                    readResult = Console.ReadLine();
+                    
+                    if (readResult != null && readResult != "")
+                    {
+                        ourAnimals[i, 4] = "Physical description: " + readResult;
+                    }
+                } while (ourAnimals[i, 4] == "Physical description: " || string.IsNullOrWhiteSpace(ourAnimals[i, 4]));
+            }
+        }
+    }
+    
+    Console.WriteLine("\nAge and physical description fields are complete for all animals.");
+    Console.WriteLine("Press the Enter key to continue.");
+    readResult = Console.ReadLine();
+    break;
+
+        case "4":
+            for (int i = 0; i < maxPets; i++)
+    {
+        if (ourAnimals[i, 0] != null && ourAnimals[i, 0] != "")
+        {
+            // Skip animals that have no ID assigned (default value)
+            if (ourAnimals[i, 0] == "ID #: ")
+            {
+                continue;
+            }
+            
+            // Check if nickname data is incomplete
+            if (ourAnimals[i, 3] == "Nickname: " || ourAnimals[i, 3] == "Nickname: tbd" || string.IsNullOrWhiteSpace(ourAnimals[i, 3]))
+            {
+                // Extract the ID for the message
+                string petID = ourAnimals[i, 0].Substring(5, 2);
+                
+                do
+                {
+                    Console.WriteLine($"Enter a nickname for ID #: {petID}");
+                    readResult = Console.ReadLine();
+                    
+                    if (readResult != null && readResult != "")
+                    {
+                        ourAnimals[i, 3] = "Nickname: " + readResult;
+                    }
+                } while (ourAnimals[i, 3] == "Nickname: " || string.IsNullOrWhiteSpace(ourAnimals[i, 3]));
+            }
+            
+            // Check if personality description data is incomplete
+            if (ourAnimals[i, 5] == "Personality: " || ourAnimals[i, 5] == "Personality: tbd" || string.IsNullOrWhiteSpace(ourAnimals[i, 5]))
+            {
+                // Extract the ID for the message
+                string petID = ourAnimals[i, 0].Substring(5, 2);
+                
+                do
+                {
+                    Console.WriteLine($"Enter a personality description for ID #: {petID} (likes or dislikes, tricks, energy level)");
+                    readResult = Console.ReadLine();
+                    
+                    if (readResult != null && readResult != "")
+                    {
+                        ourAnimals[i, 5] = "Personality: " + readResult;
+                    }
+                } while (ourAnimals[i, 5] == "Personality: " || string.IsNullOrWhiteSpace(ourAnimals[i, 5]));
+            }
+        }
+    }
+    
+    Console.WriteLine("Nickname and personality description fields are complete for all of our friends.");
+    Console.WriteLine("Press the Enter key to continue");
+    readResult = Console.ReadLine();
+    break;
+
+        case "5":
+            Console.WriteLine("\nEdit an animal's age selected");
+            Console.WriteLine("Press any key to continue");
+            Console.ReadKey();
+            break;
+
+        case "6":
+            Console.WriteLine("\nEdit an animal's personality description selected");
+            Console.WriteLine("Press any key to continue");
+            Console.ReadKey();
+            break;
+
+        case "7":
+    // Display all cats with a specified characteristic
+    string[] catCharacteristics = new string[maxPets];
+    int catCount = 0;
+    
+    // First, get all cats from the ourAnimals array
+    for (int i = 0; i < maxPets; i++)
+    {
+        if (ourAnimals[i, 0] != null && ourAnimals[i, 0] != "" && ourAnimals[i, 1].Contains("cat"))
+        {
+            catCharacteristics[catCount] = $"{ourAnimals[i, 0]} {ourAnimals[i, 4]} {ourAnimals[i, 5]}";
+            catCount++;
+        }
+    }
+    
+    if (catCount == 0)
+    {
+        Console.WriteLine("\nThere are no cats in the ourAnimals array.");
+        Console.WriteLine("Press the Enter key to continue.");
+        readResult = Console.ReadLine();
+        break;
+    }
+    
+    // Build the search terms array
+    Console.WriteLine($"\nThere are {catCount} cats in the ourAnimals array. Please enter search terms to search for specific characteristics.");
+    Console.WriteLine("You can enter multiple search terms separated by spaces, for example: 'white friendly'");
+    Console.Write("\nEnter search terms: ");
+    
+    readResult = Console.ReadLine();
+    string[] searchTerms = null;
+    
+    if (readResult != null)
+    {
+        // Convert to lowercase and split by spaces
+        searchTerms = readResult.ToLower().Split(' ');
+        Console.WriteLine($"\nSearching for cats with {searchTerms.Length} characteristics:");
+        for (int i = 0; i < searchTerms.Length; i++)
+        {
+            Console.WriteLine($" - {searchTerms[i]}");
+        }
+    }
+    
+    // Search for cats with the specified characteristics
+    bool foundMatches = false;
+    Console.WriteLine("\nSearch results:");
+    
+    // Add a simple animation for the search process
+    Console.Write("Searching");
+    for (int i = 0; i < 5; i++)
+    {
+        Console.Write(".");
+        System.Threading.Thread.Sleep(300);
+    }
+    Console.WriteLine();
+    
+    for (int i = 0; i < catCount; i++)
+    {
+        bool matchFound = true;
+        
+        // If any search term is not found, this is not a match
+        if (searchTerms != null)
+        {
+            foreach (string term in searchTerms)
+            {
+                if (!catCharacteristics[i].ToLower().Contains(term))
+                {
+                    matchFound = false;
+                    break;
+                }
+            }
+        }
+        
+        if (matchFound)
+        {
+            // Extract and display the pet ID from the characteristics string
+            string petID = catCharacteristics[i].Substring(5, 2);
+            
+            // Find the full pet data in the ourAnimals array
+            for (int j = 0; j < maxPets; j++)
+            {
+                if (ourAnimals[j, 0] != null && ourAnimals[j, 0].Contains(petID))
+                {
+                    Console.WriteLine("\nMatch found:");
+                    for (int k = 0; k < 6; k++)
+                    {
+                        Console.WriteLine(ourAnimals[j, k]);
+                    }
+                    foundMatches = true;
+                    break;
+                }
+            }
+        }
+    }
+    
+    if (!foundMatches)
+    {
+        Console.WriteLine("\nNo cats found with the specified characteristics.");
+    }
+    
+    Console.WriteLine("\nPress the Enter key to continue.");
+    readResult = Console.ReadLine();
+    break;
+
+case "8":
+    // Display all dogs with a specified characteristic
+    string[] dogCharacteristics = new string[maxPets];
+    int dogCount = 0;
+    
+    // First, get all dogs from the ourAnimals array
+    for (int i = 0; i < maxPets; i++)
+    {
+        if (ourAnimals[i, 0] != null && ourAnimals[i, 0] != "" && ourAnimals[i, 1].Contains("dog"))
+        {
+            dogCharacteristics[dogCount] = $"{ourAnimals[i, 0]} {ourAnimals[i, 4]} {ourAnimals[i, 5]}";
+            dogCount++;
+        }
+    }
+    
+    if (dogCount == 0)
+    {
+        Console.WriteLine("\nThere are no dogs in the ourAnimals array.");
+        Console.WriteLine("Press the Enter key to continue.");
+        readResult = Console.ReadLine();
+        break;
+    }
+    
+    // Build the search terms array
+    Console.WriteLine($"\nThere are {dogCount} dogs in the ourAnimals array. Please enter search terms to search for specific characteristics.");
+    Console.WriteLine("You can enter multiple search terms separated by spaces, for example: 'large friendly'");
+    Console.Write("\nEnter search terms: ");
+    
+    readResult = Console.ReadLine();
+    string[] dogSearchTerms = null;
+    
+    if (readResult != null)
+    {
+        // Convert to lowercase and split by spaces
+        dogSearchTerms = readResult.ToLower().Split(' ');
+        Console.WriteLine($"\nSearching for dogs with {dogSearchTerms.Length} characteristics:");
+        for (int i = 0; i < dogSearchTerms.Length; i++)
+        {
+            Console.WriteLine($" - {dogSearchTerms[i]}");
+        }
+    }
+    
+    // Search for dogs with the specified characteristics
+    bool foundDogMatches = false;
+    Console.WriteLine("\nSearch results:");
+    
+    // Add a simple animation for the search process
+    Console.Write("Searching");
+    for (int i = 0; i < 5; i++)
+    {
+        Console.Write(".");
+        System.Threading.Thread.Sleep(300);
+    }
+    Console.WriteLine();
+    
+    for (int i = 0; i < dogCount; i++)
+    {
+        bool matchFound = true;
+        
+        // If any search term is not found, this is not a match
+        if (dogSearchTerms != null)
+        {
+            foreach (string term in dogSearchTerms)
+            {
+                if (!dogCharacteristics[i].ToLower().Contains(term))
+                {
+                    matchFound = false;
+                    break;
+                }
+            }
+        }
+        
+        if (matchFound)
+        {
+            // Extract and display the pet ID from the characteristics string
+            string petID = dogCharacteristics[i].Substring(5, 2);
+            
+            // Find the full pet data in the ourAnimals array
+            for (int j = 0; j < maxPets; j++)
+            {
+                if (ourAnimals[j, 0] != null && ourAnimals[j, 0].Contains(petID))
+                {
+                    Console.WriteLine("\nMatch found:");
+                    for (int k = 0; k < 6; k++)
+                    {
+                        Console.WriteLine(ourAnimals[j, k]);
+                    }
+                    foundDogMatches = true;
+                    break;
+                }
+            }
+        }
+    }
+    
+    if (!foundDogMatches)
+    {
+        Console.WriteLine("\nNo dogs found with the specified characteristics.");
+    }
+    
+    Console.WriteLine("\nPress the Enter key to continue.");
+    readResult = Console.ReadLine();
+    break;
+
+        case "exit":
+            Console.WriteLine("\nGoodbye!");
+            break;
+
+        default:
+            Console.WriteLine("\nInvalid selection. Press any key to continue.");
+            Console.ReadKey();
+            break;
+    }
+} while (menuSelection != "exit");
